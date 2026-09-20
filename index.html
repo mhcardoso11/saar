@@ -206,14 +206,13 @@
   .pdp { position: fixed; inset: 0; z-index: 200; background: var(--paper); display: none; overflow-y: auto; padding-top: env(safe-area-inset-top,0px); }
   .pdp.open { display: block; }
   .pdp-top { position: sticky; top: 0; z-index: 20; background: var(--paper); border-bottom: 1px solid var(--line); }
-  .pdp-top .wrap { height: 58px; display: flex; align-items: center; }
-  .back { display: inline-flex; align-items: center; gap: 8px; background: none; border: none; cursor: pointer; color: var(--ink); font-family: inherit; font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; padding: 8px 0; }
-  .back svg { width: 15px; height: 15px; }
+  /* cabeçalho da página de produto = mesmo cabeçalho da loja (menu, logo, busca, Instagram) + seta de voltar à esquerda */
+  .pdp-left { align-items: center; gap: 2px; }
   .pdp-main { display: grid; grid-template-columns: minmax(0,1fr); max-width: 1280px; margin: 0 auto; }
   @media (min-width: 900px) { .pdp-main { grid-template-columns: minmax(0,1.15fr) minmax(0,.85fr); gap: 0 56px; padding: 0 20px; } }
   /* galeria */
   .gal { min-width: 0; }
-  @media (min-width: 900px) { .gal { display: grid; grid-template-columns: 68px minmax(0,1fr); gap: 10px; align-self: start; position: sticky; top: 58px; padding: 24px 0; } .gal.single { grid-template-columns: minmax(0,1fr); } }
+  @media (min-width: 900px) { .gal { display: grid; grid-template-columns: 68px minmax(0,1fr); gap: 10px; align-self: start; position: sticky; top: 62px; padding: 24px 0; } .gal.single { grid-template-columns: minmax(0,1fr); } }
   .car { position: relative; min-width: 0; }
   .car-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
   .car-track::-webkit-scrollbar { display: none; }
@@ -273,6 +272,15 @@
   .feats li::before { content: ''; flex: none; width: 5px; height: 5px; margin-top: 9px; background: var(--accent); }
   .spec { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
   .spec:last-child { border-bottom: none; } .spec b { font-weight: 500; color: var(--ink); text-align: right; }
+  /* tabela de medidas */
+  .size-wrap { overflow-x: auto; margin: 0 0 12px; }
+  .size-table { width: 100%; border-collapse: collapse; text-align: center; font-size: 12.5px; color: var(--ink); }
+  .size-table th, .size-table td { padding: 11px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  .size-table thead th { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+  .size-table th:first-child { text-align: left; padding-left: 0; }
+  .size-table tbody th { font-weight: 500; letter-spacing: .06em; }
+  .size-table tbody tr:last-child th, .size-table tbody tr:last-child td { border-bottom: none; }
+  .size-note { font-size: 12px; margin: 0; }
   /* avaliações */
   .reviews { border-top: 1px solid var(--line); padding: 56px 20px 110px; }
   .rev-grid { display: grid; grid-template-columns: 1fr; gap: 36px; max-width: 1000px; margin: 0 auto; }
@@ -427,11 +435,24 @@
 
 <div class="pdp" id="pdp" role="dialog" aria-modal="true" aria-label="Produto">
   <div class="pdp-top">
-    <div class="wrap">
-      <button class="back" id="pdpBack">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 18l-6-6 6-6"/></svg>
-        Voltar
-      </button>
+    <div class="wrap head-main">
+      <div class="head-left pdp-left">
+        <button class="icon-btn" id="pdpBack" aria-label="Voltar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="dots" id="pdpMenu" aria-label="Abrir menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <a class="logo" href="#top" id="pdpLogo" aria-label="Saar.og"><span class="wm"></span></a>
+      <div class="head-icons">
+        <button class="icon-btn" id="pdpSearch" aria-label="Pesquisar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
+        </button>
+        <a class="icon-btn" href="https://ig.me/m/saar.og" target="_blank" rel="noopener" aria-label="Instagram Direct">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+        </a>
+      </div>
     </div>
   </div>
   <div class="pdp-main">
@@ -519,6 +540,92 @@
       { n: "Vinícius G.", s: 4, d: "29/07/2026", t: "Muito bonito. No começo achei que fecha um pouco justo, mas se ajusta com o uso.", v: "Tam. 40" }
     ]
   };
+
+  // ==================================================================
+  // TABELA DE MEDIDAS, COMPOSIÇÃO E LAVAGEM (aparecem na página do produto)
+  // ATENÇÃO: os números e materiais abaixo são EXEMPLOS. Troque pelas medidas
+  // reais das suas peças e pelo que está escrito na etiqueta de cada uma.
+  //
+  // SIZE_CHARTS: uma tabela por categoria (cols = títulos, rows = linhas, a 1ª coluna é o tamanho).
+  //   Para uma peça usar outra tabela, ligue o id dela em CHART_OF.
+  // COMP_EX: composição de cada produto, por id: [["Rótulo","Valor"], ...].
+  //   Também dá para colocar comp: [...] direto dentro do produto.
+  // CARE: instruções de lavagem por categoria. CARE_OF liga uma peça a outro grupo.
+  // ==================================================================
+  var SIZE_CHARTS = {
+    bermudas: { cols: ["Tamanho","Cintura","Quadril","Compr."],
+      rows: [["P","76","100","50"],["M","80","104","52"],["G","84","108","54"],["GG","88","112","56"]],
+      note: "Medidas da peça, em centímetros. Compr. = comprimento. Pode haver diferença de 1 a 2 cm." },
+    camisetas: { cols: ["Tamanho","Largura","Compr.","Manga"],
+      rows: [["P","52","69","20"],["M","55","71","21"],["G","58","73","22"],["GG","61","75","23"]],
+      note: "Medidas da peça, em centímetros. A largura é medida de axila a axila. Compr. = comprimento." },
+    oversized: { cols: ["Tamanho","Largura","Compr.","Manga"],
+      rows: [["P","58","70","24"],["M","61","72","25"],["G","64","74","26"],["GG","67","76","27"]],
+      note: "Modelagem oversized: as medidas já consideram o caimento solto. Medidas da peça, em centímetros. Compr. = comprimento." },
+    tenis: { cols: ["Numeração","Pé (cm)"],
+      rows: [["38","24,6"],["39","25,3"],["40","26,0"],["41","26,6"],["42","27,3"],["43","28,0"],["44","28,6"]],
+      note: "Comprimento do pé em centímetros, do calcanhar até o dedão. Escolha a numeração mais próxima. Em dúvida entre dois números, chame a gente no Direct." },
+    oculos: { cols: ["Tamanho","Lente","Ponte","Haste"],
+      rows: [["Único","52","18","140"]],
+      note: "Medidas da armação, em milímetros." }
+  };
+  var CHART_OF = { "camiseta-oversized": "oversized" };
+
+  var COMP_EX = {
+    "bermuda-cargo":      [["Tecido","100% algodão"]],
+    "bermuda-moletom":    [["Tecido","80% algodão, 20% poliéster"]],
+    "bermuda-jeans":      [["Tecido","100% algodão"]],
+    "bermuda-listrada":   [["Tecido","70% algodão, 30% poliéster"]],
+    "camiseta-logo":      [["Tecido","100% algodão penteado"]],
+    "camiseta-oversized": [["Tecido","100% algodão"]],
+    "camiseta-grafica":   [["Tecido","100% algodão"]],
+    "camiseta-polo":      [["Tecido","100% algodão (piquê)"]],
+    "tenis-court":        [["Cabedal","Couro sintético"],["Solado","Borracha"]],
+    "tenis-runner":       [["Cabedal","Malha e sintético"],["Solado","Borracha"]],
+    "tenis-chunky":       [["Cabedal","Couro sintético"],["Solado","Borracha"]],
+    "tenis-classic":      [["Cabedal","Couro sintético"],["Solado","Borracha"]],
+    "oculos-square":      [["Armação","Acetato"],["Haste","Metal"],["Lente","Policarbonato"]],
+    "oculos-slim":        [["Armação","Acetato"],["Lente","Policarbonato"]],
+    "oculos-round":       [["Armação","Acetato"],["Lente","Policarbonato"]],
+    "oculos-noir":        [["Armação","Acetato"],["Lente","Policarbonato"]]
+  };
+
+  var CARE = {
+    bermudas: { t: "Instruções de lavagem", items: [
+      "Lave à mão ou na máquina, em água fria (até 30 °C)",
+      "Vire a peça do avesso antes de lavar",
+      "Não use alvejante nem cloro",
+      "Não torça. Seque à sombra",
+      "Passe do avesso, em temperatura média"
+    ] },
+    jeans: { t: "Instruções de lavagem", items: [
+      "Lave do avesso, em água fria (até 30 °C)",
+      "Nas primeiras lavagens, lave separado de peças claras",
+      "Não use alvejante nem cloro",
+      "Não torça. Seque à sombra",
+      "Passe do avesso, em temperatura média"
+    ] },
+    camisetas: { t: "Instruções de lavagem", items: [
+      "Lave à mão ou na máquina, em água fria (até 30 °C)",
+      "Vire a peça do avesso para proteger a estampa",
+      "Não use alvejante nem cloro",
+      "Não torça e não use secadora. Seque à sombra",
+      "Passe do avesso, nunca direto sobre a estampa"
+    ] },
+    tenis: { t: "Instruções de lavagem", items: [
+      "Limpe com pano úmido e sabão neutro",
+      "Não lave na máquina e não deixe de molho",
+      "Retire os cadarços e lave separado",
+      "Seque à sombra, longe de calor direto"
+    ] },
+    oculos: { t: "Limpeza e cuidados", items: [
+      "Limpe com o pano de microfibra e água com sabão neutro",
+      "Evite papel toalha e a barra da roupa: podem riscar a lente",
+      "Não deixe no carro quente nem no sol forte",
+      "Guarde em estojo quando não estiver usando"
+    ] }
+  };
+  var CARE_OF = { "bermuda-jeans": "jeans" };
 
   var products = [
     { id: "bermuda-cargo", best: true, name: "Bermuda Cargo", price: 189.90, oldPrice: 259.90, cat: "bermudas", sizes: S4,
@@ -772,6 +879,19 @@
   }
   function acc(t, body, open){ return '<details class="acc"' + (open ? ' open' : '') + '><summary>' + t + '</summary><div class="body">' + body + '</div></details>'; }
   function li(a){ return '<ul class="feats">' + a.map(function(f){ return '<li>' + f + '</li>'; }).join('') + '</ul>'; }
+  function sizeTable(p){
+    var t = SIZE_CHARTS[CHART_OF[p.id] || p.cat]; if (!t) return '';
+    var head = '<tr>' + t.cols.map(function(c){ return '<th scope="col">' + c + '</th>'; }).join('') + '</tr>';
+    var rows = t.rows.map(function(r){
+      return '<tr>' + r.map(function(v, k){ return k === 0 ? '<th scope="row">' + v + '</th>' : '<td>' + v + '</td>'; }).join('') + '</tr>';
+    }).join('');
+    return '<div class="size-wrap"><table class="size-table"><thead>' + head + '</thead><tbody>' + rows + '</tbody></table></div><p class="size-note">' + t.note + '</p>';
+  }
+  function compBlock(p){
+    var c = p.comp || COMP_EX[p.id]; if (!c) return '';
+    return c.map(function(s){ return '<div class="spec"><span>' + s[0] + '</span><b>' + s[1] + '</b></div>'; }).join('');
+  }
+  function careOf(p){ return CARE[p.care || CARE_OF[p.id] || p.cat]; }
   function toast(m){
     toastEl.textContent = m; toastEl.classList.add('show');
     clearTimeout(toast.t); toast.t = setTimeout(function(){ toastEl.classList.remove('show'); }, 2800);
@@ -857,6 +977,9 @@
     $('pdpAcc').innerHTML =
       acc('Sobre a peça', '<p class="copy-head">' + p.head + '</p><p>' + p.desc + '</p>' + li(p.feats), true) +
       acc('Detalhes', p.specs.map(function(s){ return '<div class="spec"><span>' + s[0] + '</span><b>' + s[1] + '</b></div>'; }).join('')) +
+      (sizeTable(p) ? acc('Tabela de medidas', sizeTable(p)) : '') +
+      (compBlock(p) ? acc('Composição', compBlock(p)) : '') +
+      (careOf(p) ? acc(careOf(p).t, li(careOf(p).items)) : '') +
       (p.incl ? acc('Incluído no pedido', li(p.incl)) : '') +
       acc('Envio e trocas', '<p>Despachamos em até 2 dias úteis para todo o Brasil. Pagamento em até ' + INSTALLMENTS + 'x sem juros no cartão.</p><p>Precisa trocar? É só chamar a gente no Direct.</p>');
     renderReviews(p);
@@ -875,6 +998,23 @@
     if (t) { e.preventDefault(); openPdp(t.dataset.open); }
   });
   document.getElementById('pdpBack').addEventListener('click', closePdp);
+
+  // Cabeçalho da página de produto: menu, busca e logo fecham o produto e abrem o que foi pedido
+  function leavePdp(then){
+    var had = layers[layers.length - 1] === 'pdp';
+    closePdp();
+    if (!had) { then(); return; }
+    var done = false;
+    function run(){ if (done) return; done = true; window.removeEventListener('popstate', run); then(); }
+    window.addEventListener('popstate', run);
+    setTimeout(run, 500);
+  }
+  $('pdpMenu').addEventListener('click', function(){ leavePdp(openMenu); });
+  $('pdpSearch').addEventListener('click', function(){ leavePdp(function(){ $('openSearch').click(); }); });
+  $('pdpLogo').addEventListener('click', function(e){
+    e.preventDefault();
+    leavePdp(function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  });
   document.addEventListener('keydown', function(e){
     if (e.key !== 'Escape') return;
     if (pdp.classList.contains('open')) closePdp();
