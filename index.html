@@ -98,8 +98,8 @@
     .promo img { aspect-ratio: 1024/1536; max-height: 92vh; max-height: 92svh; object-fit: cover; object-position: center 55%; }
     .promo { margin-top: 32px; }
   }
-  .grid .promo { grid-column: 1 / -1; margin: 14px 0 22px; }
-  .promo.hide { display: none; }
+  .cat-sec { margin-bottom: 56px; } .cat-sec:last-child { margin-bottom: 24px; }
+  #sections > .promo { margin: 8px 0 56px; }
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     font-family: inherit; font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .14em;
@@ -338,6 +338,7 @@
   </div>
   <nav id="menuNav">
     <button class="active" data-cat="all">Tudo</button>
+    <button data-cat="best">Mais vendidos</button>
     <button data-cat="bermudas">Bermudas</button>
     <button data-cat="camisetas">Camisetas</button>
     <button data-cat="tenis">Tênis</button>
@@ -365,8 +366,7 @@
 </section>
 
 <section class="products wrap" id="colecao">
-  <h2 class="sec-title" id="secTitle">Coleção</h2>
-  <div class="grid" id="grid"></div>
+  <div id="sections"></div>
   <p class="no-results" id="noResults">Nenhuma peça encontrada</p>
 </section>
 
@@ -400,6 +400,7 @@
         <h4>Coleção</h4>
         <ul>
           <li><button data-foot-cat="all">Tudo</button></li>
+          <li><button data-foot-cat="best">Mais vendidos</button></li>
           <li><button data-foot-cat="bermudas">Bermudas</button></li>
           <li><button data-foot-cat="camisetas">Camisetas</button></li>
           <li><button data-foot-cat="tenis">Tênis</button></li>
@@ -486,6 +487,7 @@
   // AVALIAÇÕES: reviews = [{n:"Nome", s:5, d:"dd/mm/aaaa", t:"texto", v:"Tam. M"}]
   //   Se o produto não tiver "reviews", usa os exemplos de REVIEWS_EX (por categoria).
   // ==================================================================
+  // MAIS VENDIDOS: coloque best: true no produto para ele aparecer na seção "Mais vendidos".
   function C(n, h, imgs){ return { n: n, h: h, imgs: imgs || [] }; }
   var S4 = ["P","M","G","GG"];
   var SN = ["38","39","40","41","42","43","44"]; // numeração dos tênis
@@ -515,7 +517,7 @@
   };
 
   var products = [
-    { id: "bermuda-cargo", name: "Bermuda Cargo", price: 189.90, oldPrice: 259.90, cat: "bermudas", sizes: S4,
+    { id: "bermuda-cargo", best: true, name: "Bermuda Cargo", price: 189.90, oldPrice: 259.90, cat: "bermudas", sizes: S4,
       colors: [C("Verde militar","#2E3A2A"), C("Preto","#161616"), C("Areia","#B8A88A")],
       head: "Utilitária no visual, confortável no dia a dia.",
       desc: "Corte cargo com bolsos laterais grandes e cintura ajustável, para quem quer praticidade sem abrir mão do estilo. Cai reto, não aperta e combina do tênis à sandália. Peça numerada do Drop 03, sem reposição.",
@@ -545,7 +547,7 @@
       desc: "Algodão penteado de gramatura alta, com logo serigrafado no peito. O corte reto cai bem em qualquer corpo e o tecido tem corpo, sem ficar mole.",
       feats: ["Algodão penteado, gramatura alta","Logo serigrafado no peito","Corte reto, fácil de combinar"],
       specs: [["Modelagem","Reta"],["Tecido","Algodão penteado, gramatura alta"],["Estampa","Logo serigrafado no peito"]] },
-    { id: "camiseta-oversized", name: "Camiseta Oversized", price: 109.90, oldPrice: 159.90, cat: "camisetas", sizes: S4,
+    { id: "camiseta-oversized", best: true, name: "Camiseta Oversized", price: 109.90, oldPrice: 159.90, cat: "camisetas", sizes: S4,
       colors: [C("Preto","#1A1A1A"), C("Cinza","#6B6B6B")],
       head: "Ombro caído e caimento solto, do jeito certo.",
       desc: "Oversized com ombro caído e barra dupla costurada, que dá acabamento e ajuda a manter a forma. Use solta com bermuda ou por baixo de uma jaqueta.",
@@ -564,7 +566,7 @@
       feats: ["Piquê com textura e respiro","Gola canelada com acabamento firme","Abotoamento discreto"],
       specs: [["Modelagem","Clássica"],["Tecido","Piquê"],["Gola","Canelada, com abotoamento"]] },
     // TÊNIS: nomes, preços, cores e textos abaixo são EXEMPLOS. Troque pelos seus.
-    { id: "tenis-court", name: "Tênis Court", price: 299.90, oldPrice: 399.90, cat: "tenis", sizes: SN,
+    { id: "tenis-court", best: true, name: "Tênis Court", price: 299.90, oldPrice: 399.90, cat: "tenis", sizes: SN,
       colors: [C("Preto","#161616"), C("Branco","#F1EFEA")],
       head: "Cano baixo, visual limpo, combina com tudo.",
       desc: "Tênis casual de cano baixo com visual limpo, feito para o dia a dia. Funciona com bermuda, calça e com as camisetas do drop.",
@@ -606,7 +608,7 @@
       desc: "Armação redonda em acetato e lente marrom degradê, que suaviza o visual. Um clássico retrô fácil de usar todo dia.",
       feats: ["Armação redonda em acetato","Lente marrom degradê","Retrô e fácil de usar"],
       specs: [["Formato","Redondo"],["Armação","Acetato"],["Lente","Marrom degradê"]] },
-    { id: "oculos-noir", name: "Óculos Noir", price: 109.90, oldPrice: 159.90, cat: "oculos", sizes: ["Único"],
+    { id: "oculos-noir", best: true, name: "Óculos Noir", price: 109.90, oldPrice: 159.90, cat: "oculos", sizes: ["Único"],
       colors: [C("Preto fosco","#161616")],
       head: "Todo preto. Discreto e versátil.",
       desc: "Armação preta fosca com lente escura total. Visual limpo que funciona de dia e combina com qualquer peça do drop.",
@@ -624,7 +626,7 @@
   }
 
   var byId = {}; products.forEach(function(p){ byId[p.id] = p; });
-  var labels = { bermudas: "Bermudas", camisetas: "Camisetas", tenis: "Tênis", oculos: "Óculos", promo: "Promoção", all: "Coleção" };
+  var labels = { bermudas: "Bermudas", camisetas: "Camisetas", tenis: "Tênis", oculos: "Óculos", best: "Mais vendidos", promo: "Promoção", all: "Coleção" };
 
   // foto do produto (usada no grid e na galeria): media(produto, cor, índice da foto)
   function media(p, c, i){
@@ -633,23 +635,47 @@
     return '<div class="photo" style="background:' + c.h + '"></div><div class="grain"></div><span class="ph-mark">Saar.og' + (i ? ' · ' + (i + 1) : '') + '</span>';
   }
 
-  var grid = document.getElementById('grid');
+  // SEÇÕES DA COLEÇÃO: cada seção mostra um tipo de peça, na ordem abaixo.
+  // "best" = Mais vendidos (produtos com best: true). Para mudar a ordem, mude a lista.
+  var SECTIONS = ["best", "bermudas", "camisetas", "tenis", "oculos"];
   var promoEl = document.getElementById('promoSection');
-  products.forEach(function(p){
-    if (p.cat === PROMO_ANTES_DE && promoEl.parentNode !== grid) grid.appendChild(promoEl);
-    var card = document.createElement('div');
-    card.className = 'card'; card.dataset.cat = p.cat; card.dataset.promo = p.oldPrice > 0 ? '1' : '0'; card.dataset.name = p.name.toLowerCase();
-    card.innerHTML =
-      '<button class="art" data-open="' + p.id + '">' +
-        (p.oldPrice > 0 ? '<span class="badge">Promoção</span>' : '') +
-        media(p) +
-      '</button>' +
-      '<div class="info">' +
-        '<div class="name" data-open="' + p.id + '">' + p.name + '</div>' +
-        priceBlock(p) +
-      '</div>';
-    grid.appendChild(card);
-  });
+  var sectionsEl = document.getElementById('sections');
+  var view = { cat: 'all', term: '' };
+
+  function itemsOf(key){
+    return products.filter(function(p){ return key === 'best' ? p.best : key === 'promo' ? p.oldPrice > 0 : p.cat === key; });
+  }
+  function cardHTML(p){
+    return '<div class="card"><button class="art" data-open="' + p.id + '">' +
+        (p.oldPrice > 0 ? '<span class="badge">Promoção</span>' : '') + media(p) +
+      '</button><div class="info"><div class="name" data-open="' + p.id + '">' + p.name + '</div>' + priceBlock(p) + '</div></div>';
+  }
+  function secEl(title, list){
+    var el = document.createElement('section'); el.className = 'cat-sec';
+    el.innerHTML = '<h2 class="sec-title">' + title + '</h2><div class="grid">' + list.map(cardHTML).join('') + '</div>';
+    return el;
+  }
+  function renderCollection(){
+    var found = 0, term = view.term, cat = view.cat;
+    if (promoEl.parentNode) promoEl.parentNode.removeChild(promoEl);
+    sectionsEl.innerHTML = '';
+    function add(key){
+      var list = itemsOf(key); if (!list.length) return;
+      sectionsEl.appendChild(secEl(labels[key], list)); found += list.length;
+    }
+    if (term) {
+      var hits = products.filter(function(p){ return p.name.toLowerCase().indexOf(term) !== -1 || (labels[p.cat] || '').toLowerCase().indexOf(term) !== -1; });
+      if (hits.length) { sectionsEl.appendChild(secEl('Resultados', hits)); found = hits.length; }
+    } else if (cat === 'all') {
+      SECTIONS.forEach(function(key){
+        if (key === PROMO_ANTES_DE) sectionsEl.appendChild(promoEl);
+        add(key);
+      });
+      if (!promoEl.parentNode) sectionsEl.appendChild(promoEl);
+    } else add(cat);
+    document.getElementById('noResults').classList.toggle('show', found === 0);
+  }
+  renderCollection();
 
   // BENEFÍCIOS — edite os textos aqui
   var benefits = [
@@ -669,7 +695,6 @@
   track.innerHTML = bHtml + bHtml; // duplicado para o loop contínuo
 
   var navBtns = document.querySelectorAll('#menuNav button');
-  var secTitle = document.getElementById('secTitle');
   var drawer = document.getElementById('drawer');
   var scrim = document.getElementById('scrim');
 
@@ -687,12 +712,9 @@
   scrim.addEventListener('click', closeMenu);
 
   function activateCat(cat, scroll){
+    view.cat = cat; view.term = '';
     navBtns.forEach(function(b){ b.classList.toggle('active', b.dataset.cat === cat); });
-    document.querySelectorAll('.card').forEach(function(c){
-      c.classList.toggle('hide', cat === 'promo' ? c.dataset.promo !== '1' : (cat !== 'all' && c.dataset.cat !== cat));
-    });
-    promoEl.classList.toggle('hide', cat !== 'all');
-    secTitle.textContent = labels[cat] || 'Coleção';
+    renderCollection();
     if (scroll) document.getElementById('colecao').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
   navBtns.forEach(function(b){
@@ -722,21 +744,9 @@
 
   function runSearch(term){
     term = term.trim().toLowerCase();
-    if (!term) {
-      activateCat('all', false);
-      noResults.classList.remove('show');
-      return;
-    }
+    if (!term) { activateCat('all', false); return; }
     navBtns.forEach(function(b){ b.classList.remove('active'); });
-    var found = 0;
-    document.querySelectorAll('.card').forEach(function(c){
-      var hit = c.dataset.name.indexOf(term) !== -1 || (labels[c.dataset.cat] || '').toLowerCase().indexOf(term) !== -1;
-      c.classList.toggle('hide', !hit);
-      if (hit) found++;
-    });
-    promoEl.classList.add('hide');
-    secTitle.textContent = 'Resultados';
-    noResults.classList.toggle('show', found === 0);
+    view.term = term; renderCollection();
   }
   searchInput.addEventListener('input', function(){ runSearch(searchInput.value); });
   searchInput.addEventListener('keydown', function(e){
